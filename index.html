@@ -1001,10 +1001,7 @@
                     <p id="modalWhyApply"></p>
                 </div>
                 
-                <button class="apply-btn" id="applyBtn">
-                    <span class="apply-btn-text">View Opportunity on Official Source</span>
-                    <span class="apply-btn-subtext">Opens official application link</span>
-                </button>
+                <button class="apply-btn" id="applyBtn">Apply Now</button>
             </div>
         </div>
     </div>
@@ -1135,45 +1132,41 @@
            }
         */
         
-     const jobs = [
-  {
-    id: 1,
-    title: "Specialist – Digital Media & Communication",
-    company: "Arla Foods Bangladesh",
-    location: "Dhaka",
-    category: "Marketing",
-    type: "Full-time",
-    experience: "Senior",
-    roleType: "Job",
-    salary: "Not disclosed",
-    deadline: "2026-10-02",
-    sourceURL: "https://lnkd.in/gFwBd2j3",
-    isVerified: true,
-    lastVerified: "2026-09-25",
-
-    summary: "Arla Foods Bangladesh is hiring a Specialist – Digital Media & Communication to lead digital media planning, content, campaigns, PR activities, and media engagement.",
-
-    responsibilities: [
-      "Lead digital media planning, execution, and optimization across Meta, YouTube, Instagram, TikTok, and other platforms.",
-      "Develop platform-relevant digital content aligned with business and brand objectives.",
-      "Manage creative, media buying, PR agencies, business partners, and vendors.",
-      "Support PR campaigns, product launches, corporate events, and media engagement.",
-      "Analyze campaign performance and provide actionable recommendations."
-    ],
-
-    requirements: [
-      "Bachelor's degree from a reputed university.",
-      "5+ years of experience in digital and offline media.",
-      "Experience with MNCs, local conglomerates, or relevant agencies.",
-      "Strong knowledge of major digital media platforms.",
-      "Experience managing media agencies and large-scale campaigns.",
-      "Experience writing press releases, media articles, and external publications.",
-      "Excellent written and verbal English."
-    ],
-
-    whyApply: "This opportunity is suited to experienced digital media and communication professionals looking to work with a multinational FMCG company."
-  }
-];
+        const jobs = [
+          {
+            id: 1,
+            title: "Specialist – Digital Media & Communication",
+            company: "Arla Foods Bangladesh",
+            location: "Dhaka",
+            category: "Marketing",
+            type: "Full-time",
+            experience: "Senior",
+            roleType: "Job",
+            salary: "Not disclosed",
+            deadline: "2026-10-02",
+            sourceURL: "https://lnkd.in/gFwBd2j3",
+            isVerified: true,
+            lastVerified: "2026-09-24",
+            summary: "Arla Foods Bangladesh is hiring a Specialist – Digital Media & Communication to lead digital media planning, content, campaigns, PR activities, and media engagement.",
+            responsibilities: [
+              "Lead digital media planning, execution, and optimization across Meta, YouTube, Instagram, TikTok, and other platforms.",
+              "Develop platform-relevant digital content aligned with business and brand objectives.",
+              "Manage creative, media buying, PR agencies, business partners, and vendors.",
+              "Support PR campaigns, product launches, corporate events, and media engagement.",
+              "Analyze campaign performance and provide actionable recommendations."
+            ],
+            requirements: [
+              "Bachelor's degree from a reputed university.",
+              "5+ years of experience in digital and offline media.",
+              "Experience with MNCs, local conglomerates, or relevant agencies.",
+              "Strong knowledge of major digital media platforms.",
+              "Experience managing media agencies and large-scale campaigns.",
+              "Experience writing press releases, media articles, and external publications.",
+              "Excellent written and verbal English."
+            ],
+            whyApply: "This opportunity is suited to experienced digital media and communication professionals looking to work with a multinational FMCG company."
+          }
+        ];
         
         // ============================================
         // FILTER AND SEARCH LOGIC
@@ -1358,11 +1351,11 @@
             const applyBtn = document.getElementById('applyBtn');
             if (job.sourceURL) {
                 applyBtn.disabled = false;
-                applyBtn.querySelector('.apply-btn-text').textContent = 'View Opportunity on Official Source';
+                applyBtn.textContent = 'Apply Now';
                 applyBtn.onclick = () => window.open(job.sourceURL, '_blank');
             } else {
                 applyBtn.disabled = true;
-                applyBtn.querySelector('.apply-btn-text').textContent = 'Application Link Coming Soon';
+                applyBtn.textContent = 'Application Link Coming Soon';
             }
             
             // Show modal
