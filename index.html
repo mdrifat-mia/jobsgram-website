@@ -355,7 +355,6 @@
             border: 1px solid var(--border-gray);
             border-radius: 6px;
             padding: 1.5rem;
-            cursor: pointer;
             transition: all 0.2s;
         }
 
@@ -364,10 +363,9 @@
             box-shadow: 0 2px 8px rgba(0, 102, 204, 0.1);
         }
 
-        .job-card:focus-visible {
+        .view-btn:focus-visible {
             outline: 2px solid var(--primary-blue);
             outline-offset: 2px;
-            border-color: var(--primary-blue);
         }
 
         .job-header {
@@ -382,18 +380,6 @@
             font-size: 1.1rem;
             font-weight: 600;
             color: var(--text-dark);
-        }
-
-        .verified-badge {
-            background: var(--success-green);
-            color: var(--white);
-            font-size: 0.7rem;
-            font-weight: 600;
-            padding: 0.25rem 0.5rem;
-            border-radius: 3px;
-            white-space: nowrap;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
         }
 
         .job-company {
@@ -603,16 +589,6 @@
             font-size: 1rem;
             font-weight: 600;
             color: var(--text-dark);
-        }
-
-        .verification-notice {
-            background: #e8f5e9;
-            border-left: 4px solid var(--success-green);
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            color: #2e7d32;
         }
 
         .apply-btn {
@@ -986,11 +962,6 @@
             </div>
 
             <div class="modal-body">
-                <div class="verification-notice" id="verificationNotice" style="display: none;">
-                    <strong>✓ Verified</strong>
-                    <div style="font-size: 0.85rem; margin-top: 0.25rem;">Last verified: <span id="lastVerifiedDate"></span></div>
-                </div>
-
                 <div class="modal-meta" id="modalMeta"></div>
 
                 <div class="modal-section">
@@ -1223,7 +1194,7 @@
            JOB DATA STRUCTURE
            ============================================
 
-           TEMPLATE FOR ADDING REAL VERIFIED JOBS:
+           TEMPLATE FOR ADDING REAL JOBS:
 
            {
                id: [unique number],
@@ -1240,14 +1211,8 @@
                responsibilities: ["responsibility 1", "responsibility 2", ...],
                requirements: ["requirement 1", "requirement 2", ...],
                whyApply: "[Why candidate should apply]",
-               sourceURL: "[Official application link]",
-               lastVerified: "YYYY-MM-DD",
-               isVerified: true
+               sourceURL: "[Official application link]"
            }
-
-           NOTE: isVerified must be set manually per job after completing the
-           verification steps described in the "Slash Jobs Verification
-           Standard" section above. New jobs should NOT default to verified.
         */
 
         const jobs = [
@@ -1263,8 +1228,6 @@
             salary: "Not disclosed",
             deadline: "2026-10-02",
             sourceURL: "https://lnkd.in/gFwBd2j3",
-            isVerified: true,
-            lastVerified: "2026-09-24",
             summary: "Arla Foods Bangladesh is hiring a Specialist – Digital Media & Communication to lead digital media planning, content, campaigns, PR activities, and media engagement.",
             responsibilities: [
               "Lead digital media planning, execution, and optimization across Meta, YouTube, Instagram, TikTok, and other platforms.",
@@ -1384,11 +1347,6 @@
             filteredJobs.forEach(job => {
                 const jobCard = document.createElement('div');
                 jobCard.className = 'job-card';
-                jobCard.setAttribute('tabindex', '0');
-                jobCard.setAttribute('role', 'button');
-                jobCard.setAttribute('aria-label', `View details for ${job.title} at ${job.company}`);
-
-                const verifiedBadge = job.isVerified ? `<span class="verified-badge">✓ Verified</span>` : '';
 
                 jobCard.innerHTML = `
                     <div class="job-header">
@@ -1396,7 +1354,6 @@
                             <div class="job-title">${escapeHtml(job.title)}</div>
                             <div class="job-company">${escapeHtml(job.company)}</div>
                         </div>
-                        ${verifiedBadge}
                     </div>
                     <p class="job-summary">${escapeHtml(job.summary)}</p>
                     <div class="job-meta">
@@ -1421,16 +1378,11 @@
                             <span>${formatDate(job.deadline)}</span>
                         </div>
                     </div>
-                    <button class="view-btn" tabindex="-1" aria-label="View details for ${escapeHtml(job.title)} at ${escapeHtml(job.company)}">View Details</button>
+                    <button class="view-btn" type="button" aria-label="View details for ${escapeHtml(job.title)} at ${escapeHtml(job.company)}">View Details</button>
                 `;
 
-                jobCard.addEventListener('click', () => openJobModal(job));
-                jobCard.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        openJobModal(job);
-                    }
-                });
+                const viewBtn = jobCard.querySelector('.view-btn');
+                viewBtn.addEventListener('click', () => openJobModal(job));
                 jobsGrid.appendChild(jobCard);
             });
         }
@@ -1454,15 +1406,6 @@
             document.getElementById('modalJobTitle').textContent = job.title;
             document.getElementById('modalJobCompany').textContent = job.company;
             document.getElementById('modalJobSummary').textContent = job.summary;
-
-            // Show verification notice only if verified
-            const verificationNotice = document.getElementById('verificationNotice');
-            if (job.isVerified) {
-                verificationNotice.style.display = 'block';
-                document.getElementById('lastVerifiedDate').textContent = formatDate(job.lastVerified);
-            } else {
-                verificationNotice.style.display = 'none';
-            }
 
             // Meta information
             const metaHTML = `
