@@ -623,6 +623,12 @@
             opacity: 0.9;
         }
 
+        .apply-buttons-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
         @media (max-width: 768px) {
             .modal-header {
                 flex-direction: column;
@@ -985,6 +991,11 @@
                 </div>
 
                 <button class="apply-btn" id="applyBtn" aria-label="Apply for this job on the official website">Apply Now</button>
+
+                <div class="apply-buttons-group" id="applyButtonsGroup" style="display: none;">
+                    <button class="apply-btn" id="applyWhatsappBtn" aria-label="Apply via WhatsApp">Apply via WhatsApp</button>
+                    <button class="apply-btn" id="applyEmailBtn" aria-label="Apply via Email">Apply via Email</button>
+                </div>
             </div>
         </div>
     </div>
@@ -1246,6 +1257,37 @@
               "Excellent written and verbal English."
             ],
             whyApply: "This opportunity is suited to experienced digital media and communication professionals looking to work with a multinational FMCG company."
+          },
+          {
+            id: 2,
+            title: "Management Trainee Officer (MTO) – Sales & Marketing",
+            company: "Maheen Global Move",
+            location: "Gulshan-1, Dhaka",
+            category: "Marketing",
+            type: "Full-time",
+            experience: "Entry-level",
+            roleType: "Job",
+            salary: "Not specified",
+            deadline: "2026-09-30",
+            applyMethods: [
+              { type: "whatsapp", number: "8801313790741" },
+              { type: "email", address: "hr.globalmove@maheenlabel.com" }
+            ],
+            summary: "Maheen Global Move is hiring Management Trainee Officers (MTO) for its Sales & Marketing team in Gulshan-1, Dhaka. Freshers are highly encouraged to apply. The role offers an opportunity to start a career in sales and marketing, learn in a professional corporate environment, and develop professionally.",
+            responsibilities: [
+              "Support sales and marketing activities.",
+              "Contribute to customer acquisition and business development activities.",
+              "Work with the team to achieve sales and marketing objectives.",
+              "Learn and contribute within a professional corporate environment.",
+              "Support day-to-day activities related to the assigned role."
+            ],
+            requirements: [
+              "BBA / MBA",
+              "Major in Marketing or Management",
+              "Freshers are highly encouraged to apply.",
+              "10 vacancies available."
+            ],
+            whyApply: "A great opportunity to start a career in Sales & Marketing, with the chance to learn and grow in a professional corporate environment and access career development opportunities."
           }
         ];
 
@@ -1447,15 +1489,44 @@
             // Why apply
             document.getElementById('modalWhyApply').textContent = job.whyApply;
 
-            // Apply button
+            // Apply button(s)
             const applyBtn = document.getElementById('applyBtn');
-            if (job.sourceURL) {
-                applyBtn.disabled = false;
-                applyBtn.textContent = 'Apply Now';
-                applyBtn.onclick = () => window.open(job.sourceURL, '_blank');
+            const applyButtonsGroup = document.getElementById('applyButtonsGroup');
+            const applyWhatsappBtn = document.getElementById('applyWhatsappBtn');
+            const applyEmailBtn = document.getElementById('applyEmailBtn');
+
+            if (job.applyMethods && job.applyMethods.length > 0) {
+                // Jobs with specific application methods (e.g. WhatsApp/Email) show a button per method
+                applyBtn.style.display = 'none';
+                applyButtonsGroup.style.display = 'flex';
+
+                const whatsapp = job.applyMethods.find(m => m.type === 'whatsapp');
+                if (whatsapp) {
+                    applyWhatsappBtn.style.display = 'block';
+                    applyWhatsappBtn.onclick = () => window.open(`https://wa.me/${whatsapp.number}`, '_blank');
+                } else {
+                    applyWhatsappBtn.style.display = 'none';
+                }
+
+                const email = job.applyMethods.find(m => m.type === 'email');
+                if (email) {
+                    applyEmailBtn.style.display = 'block';
+                    applyEmailBtn.onclick = () => { window.location.href = `mailto:${email.address}`; };
+                } else {
+                    applyEmailBtn.style.display = 'none';
+                }
             } else {
-                applyBtn.disabled = true;
-                applyBtn.textContent = 'Application Link Coming Soon';
+                // Default behavior: a single Apply Now button linking to sourceURL
+                applyButtonsGroup.style.display = 'none';
+                applyBtn.style.display = 'block';
+                if (job.sourceURL) {
+                    applyBtn.disabled = false;
+                    applyBtn.textContent = 'Apply Now';
+                    applyBtn.onclick = () => window.open(job.sourceURL, '_blank');
+                } else {
+                    applyBtn.disabled = true;
+                    applyBtn.textContent = 'Application Link Coming Soon';
+                }
             }
 
             // Show modal
